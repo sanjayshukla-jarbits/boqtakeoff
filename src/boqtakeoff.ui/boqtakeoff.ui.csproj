@@ -123,6 +123,18 @@
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+	<Compile Include="Commands\BimLibraryCommand.cs" />
+	<Compile Include="Views\FamilyBrowserWindow.xaml.cs">
+		<DependentUpon>FamilyBrowserWindow.xaml</DependentUpon>
+	</Compile>
+  </ItemGroup>
+  <ItemGroup>
+	<Page Include="Views\FamilyBrowserWindow.xaml">
+		<SubType>Designer</SubType>
+		<Generator>MSBuild:Compile</Generator>
+	</Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\..\packages\Fody.3.3.2\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

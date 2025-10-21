@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.UI;
 using boqtakeoff.ui;
+using boqtakeoff.ui.Commands;
 using boqtakeoff.core;
 using System;
 
@@ -99,8 +100,71 @@ namespace boqtakeoff
             //    IconImageName = "icon_TagWallLayers_32x32.png",
             //    TooltipImageName = "tooltip_TagWallLayers_320x320.png"
             //};
+
+            /*-------------------------------------------[BIM Library Section]-----------------------------------------------------*/
+
+            // Create BIM Library Panel
+            var bimLibraryPanel = app.CreateRibbonPanel(tabName, "BIM Library");
+
+            // Add BIM Library Browser Button
+            AddBimLibraryBrowserButton(bimLibraryPanel);
+
+            // Add separator
+            bimLibraryPanel.AddSeparator();
+
+            // Add Export Families to S3 Button
+            AddExportFamiliesToS3Button(bimLibraryPanel);
         }
 
+        /// <summary>
+        /// Add BIM Library Browser button to ribbon panel
+        /// </summary>
+        private void AddBimLibraryBrowserButton(RibbonPanel panel)
+        {
+            try
+            {
+                var bimLibraryData = new RevitPushButtonDataModel
+                {
+                    Label = "Browse\nLibrary",
+                    Panel = panel,
+                    Tooltip = "Browse and add families from cloud BIM Library",
+                    CommandNamespacePath = BimLibraryCommand.GetPath(),
+                    IconImageName = "icon_TagWallLayers_32x32.png",  // Replace with your icon
+                    TooltipImageName = "icon_TagWallLayers_32x32.png"
+                };
+
+                var bimLibraryButton = RevitPushButton.Create(bimLibraryData);
+            }
+            catch (Exception ex)
+            {
+                boqtakeoff.core.Libraries.Utility.Logger(ex);
+            }
+        }
+
+        /// <summary>
+        /// Add Export Families to S3 button to ribbon panel
+        /// </summary>
+        private void AddExportFamiliesToS3Button(RibbonPanel panel)
+        {
+            try
+            {
+                var exportFamiliesData = new RevitPushButtonDataModel
+                {
+                    Label = "Export to\nS3",
+                    Panel = panel,
+                    Tooltip = "Export all families from current project to S3 bucket",
+                    CommandNamespacePath = ExportFamiliesToS3Command.GetPath(),
+                    IconImageName = "icon_TagWallLayers_32x32.png",  // Replace with your icon
+                    TooltipImageName = "icon_TagWallLayers_32x32.png"
+                };
+
+                var exportButton = RevitPushButton.Create(exportFamiliesData);
+            }
+            catch (Exception ex)
+            {
+                boqtakeoff.core.Libraries.Utility.Logger(ex);
+            }
+        }
         #endregion
     }
 }
