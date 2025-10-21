@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>SMI Cost BOQ</Name>
+    <Assembly>D:\Spacematrix\Revit\BOQExtractor\dlls\boqtakeoff.dll</Assembly>
+    <AddInId>3A36B518-E925-46F2-BED6-12EFC91F592C</AddInId>
+    <FullClassName>boqtakeoff.Main</FullClassName>
+    <VendorId>Sanjay Shukla</VendorId>
+    <Publisher>Sanjay Shukla</Publisher>
+    <VendorDescription>The plugin is meant to create the Cost BOQ as per SMI specifications,...</VendorDescription>
+  </AddIn>
+</RevitAddIns>

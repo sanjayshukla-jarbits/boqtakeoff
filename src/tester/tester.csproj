@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="boqtakeoff">
+      <HintPath>..\boqtakeoff\bin\Debug\boqtakeoff.dll</HintPath>
+    </Reference>
+    <Reference Include="boqtakeoff.core">
+      <HintPath>..\boqtakeoff\bin\Debug\boqtakeoff.core.dll</HintPath>
+    </Reference>
+    <Reference Include="boqtakeoff.res">
+      <HintPath>..\boqtakeoff\bin\Debug\boqtakeoff.res.dll</HintPath>
+    </Reference>
+    <Reference Include="boqtakeoff.ui">
+      <HintPath>..\boqtakeoff\bin\Debug\boqtakeoff.ui.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPI">
+      <HintPath>..\boqtakeoff\bin\Debug\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\boqtakeoff\bin\Debug\RevitAPIUI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

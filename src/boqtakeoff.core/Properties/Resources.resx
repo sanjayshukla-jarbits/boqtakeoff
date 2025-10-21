@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DownloadFolder" xml:space="preserve">
+    <value>Downloads\BOQ Template.xlsx</value>
+    <comment>Download folder and filename</comment>
+  </data>
+  <data name="Step1_select_file_label" xml:space="preserve">
+    <value>Select file (csv/excel)</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btn21" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\btn2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NewColorSchemeName" xml:space="preserve">
+    <value>Bigfish Color Scheme</value>
+  </data>
+  <data name="btn11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\btn1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Step3_select_version_label" xml:space="preserve">
+    <value>Version Label</value>
+  </data>
+  <data name="BigFish Title" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\BigFish Title.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="step-one" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\step-one.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LoggerFolderPath" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="Step2_Empty_Project_Message" xml:space="preserve">
+    <value>Please select Project</value>
+  </data>
+  <data name="_client_id" xml:space="preserve">
+    <value>1000.XEUW44N220PKJBW2NBZ6X65B9K6WWR</value>
+  </data>
+  <data name="DownloadTemplateTitle" xml:space="preserve">
+    <value>Download Template</value>
+  </data>
+  <data name="Step3_empty_version_lable" xml:space="preserve">
+    <value>Please Enter Version Label</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>Select File</value>
+  </data>
+  <data name="step-three" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\step-three.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_get_bf_error_log_url" xml:space="preserve">
+    <value>https://creator.zoho.in/api/v2/bigfish.central/purchases/report/RevitBOQDataValidationErrors_Report</value>
+  </data>
+  <data name="Breadcrumb_Step2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\Breadcrumb_Step2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RoomNamesAsLegendAndColor" xml:space="preserve">
+    <value>Room1:255,210,244-Room2:215,210,234-Room3:115,210,244-Room4:5,210,76</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="_create_boq_url" xml:space="preserve">
+    <value>https://creator.zoho.in/api/v2/bigfish.central/purchases/form/CreateBOQ_RevitPlugin</value>
+  </data>
+  <data name="btn1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\btn1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FileTypes" xml:space="preserve">
+    <value>All Supported Files (*.csv, *.xls, *,xlsx)|*.csv;*.xls;*.xls*|All files (*.*)|*.*</value>
+  </data>
+  <data name="RoomPattern" xml:space="preserve">
+    <value>Bigfish-Room</value>
+  </data>
+  <data name="btn2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\btn2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MainTitle" xml:space="preserve">
+    <value>BOQ Extractor</value>
+  </data>
+  <data name="_client_secret" xml:space="preserve">
+    <value>c226868a95ae747cc7cd3966b8c69e2e6d6998fcf6</value>
+  </data>
+  <data name="_get_project_uid_url" xml:space="preserve">
+    <value>https://creator.zoho.in/api/v2/bigfish.central/packages/report/All_Project_Details</value>
+  </data>
+  <data name="Header" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\Header.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Step11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\Step1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Select Project</value>
+  </data>
+  <data name="Step1_SelectFile_empty_Message" xml:space="preserve">
+    <value>Please select files</value>
+  </data>
+  <data name="_refresh_token" xml:space="preserve">
+    <value>1000.1ee3195f4d06fe07e54c18dd331fed75.60e5a61e7831d25ca6847e469d7e6500</value>
+  </data>
+  <data name="P2-Stage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\Phas2\P2-Stage1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_get_boq_version_details_url" xml:space="preserve">
+    <value>https://creator.zoho.in/api/v2/bigfish.central/purchases/report/CreateBOQ_RevitPlugin_Report</value>
+  </data>
+  <data name="Breadcrumb_Step4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\Breadcrumb_Step4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Set Version</value>
+  </data>
+  <data name="RoomColorScheme" xml:space="preserve">
+    <value>138,231,90:167,180,176:202,80,172:42,60,114:66,68,178:56,194,150:106,112,215:165,63,141:114,96,141:162,197,175:112,223,58:123,232,70:199,129,154:136,139,175:138,62,214:71,62,63:164,157,195:207,236,120:196,215,203:158,117,127:75,103,112:206,169,70:95,183,68:148,89,109:205,212,195:79,89,50:136,107,81:117,243,86:189,141,208:147,165,66:76,103,61:67,126,82:102,170,122:184,218,108:204,76,112:126,61,72:134,186,165:193,84,58:86,199,91:66,77,75:71,188,65:42,138,206:88,210,128:152,219,145:138,192,118:182,150,203:183,129,123:176,74,200:111,117,67:42,225,152:201,99,135:86,183,77:83,236,163:115,101,83:153,225,189:59,119,121:150,140,95:98,117,172:161,130,154:75,170,68:179,109,206:186,191,160:49,116,58:80,167,140:79,133,75:80,85,81:50,115,218:156,127,127:97,172,203:172,163,98:133,68,110:134,175,212:86,208,80:69,70,52:102,136,194:164,80,205:137,148,91:112,86,100:60,84,204:118,157,67:166,111,177:169,187,141:70,185,181:73,238,106:41,225,91:205,118,211:143,171,134:208,98,63:46,82,203:49,140,133:48,210,97:52,138,182:85,172,173:93,161,123:63,130,136:195,138,92:49,87,189:203,218,206:142,199,62:153,194,146:147,83,91:87,87,76:49,232,129:118,190,170:77,114,59:51,217,190:136,82,168:151,60,98:154,76,212:100,146,164:160,171,199:66,186,122:72,218,89:100,219,133:173,168,125:58,196,145:187,159,203:81,78,152:188,240,70:202,172,59:73,188,128:174,200,67:181,72,153:147,221,219:140,99,94:75,221,120:183,164,109:107,151,207:171,145,135:86,112,170:91,103,92:69,89,78:44,243,191:97,111,164:201,103,162:194,180,200:98,183,67:160,80,56:160,208,84:130,63,100:142,163,182:193,121,158:166,137,58:56,93,199:138,153,99:155,142,93:85,220,187:144,232,155:142,169,71</value>
+  </data>
+  <data name="Breadcrumb_Step3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\breadcrumbs\Breadcrumb_Step3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Step2_select_project_label" xml:space="preserve">
+    <value>Select Project Name</value>
+  </data>
+  <data name="step-two" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\step-two.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_token_url" xml:space="preserve">
+    <value>https://accounts.zoho.in/oauth/v2/token</value>
+  </data>
+  <data name="P2-Stage11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\breadcrumbs\Phas2\P2-Stage1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FamilyCategories" xml:space="preserve">
+    <value>Wall,Roof,Floor,Mechanical Equipment,Interior Design</value>
+  </data>
+  <data name="StaggeredGridData" xml:space="preserve">
+    <value> Interior - Floor, Interior - Partition, Interior - Ceiling, Interior - Door, Interior - Speciality Equipment, Interior - Glass Partition, Interior - Furniture, Interior - Profile &amp; Generic Elements, Interior - Lintels, Interior - Joinery, MEP - Duct, MEP - Duct Fitting, MEP - HVAC, MEP - Mechanical Equipment, MEP - Fire Pipe, MEP - Sprinkler, MEP - Fire Alarm, MEP - Electrical Fixture, MEP - Lighting Fixture, MEP - Communication Device, MEP - Cable Tray</value>
+    <comment>Interior design,Floor,Partition,Ceiling,Door,Speciality Equipment,Glass Partition,Furniture,Profile &amp; Generic Elements,Lintels,Joinery,MEP,Duct,Duct Fitting,HVAC,Mechanical Equipment,Fire Pipe,Sprinkler,Fire Alarm,Electrical Fixture,Lighting Fixture,Communication Device,Cable Tray</comment>
+  </data>
+</root>

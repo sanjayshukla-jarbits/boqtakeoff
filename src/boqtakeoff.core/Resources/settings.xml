@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mappings>
+	<errorMessages>
+		<error id="UOM_IS_EMPTY">UOM is empty in current SKU</error>
+		<error id="QUANTITY_IS_EMPTY">Quantity value is not available</error>
+		<error id="WRONG_QUANTITY_VALUE">Provided Quanity value is in wrong format</error>
+		<error id="SKU_IS_EMPTY">SKU value is empty, Please correct</error>
+		<error id="missing_sku_definition">SKU Definition is missing, Please correct</error>
+	</errorMessages>
+	<annotate>
+		<item Category="Doors" BuiltInCategory="OST_Doors" CategoryValue="doors"></item>
+		<item Category="Speciality Equipment" BuiltInCategory="OST_SpecialityEquipment" CategoryValue="speciality_equipment"></item>
+		<item Category="Furniture" BuiltInCategory="OST_Furniture" CategoryValue="furniture"></item>
+		<item Category="Plumbing Fixtures" BuiltInCategory="OST_PlumbingFixtures" CategoryValue="plumbing_fixtures"></item>
+		<item Category="Windows" BuiltInCategory="OST_Windows" CategoryValue="windows"></item>
+		<item Category="Casework" BuiltInCategory="OST_Casework" CategoryValue="casework"></item>
+		<item Category="Structural Columns" BuiltInCategory="OST_StructuralColumns" CategoryValue="structural_columns"></item>
+		<item Category="Structural Framing" BuiltInCategory="OST_StructuralFraming" CategoryValue="structural_framing"></item>
+		<item Category="Generic Models" BuiltInCategory="OST_GenericModel" CategoryValue="generic_models"></item>
+		<item Category="Generic Annotations" BuiltInCategory="OST_GenericAnnotation" CategoryValue="generic_annotations"></item>
+		<item Category="Floors" BuiltInCategory="OST_Floors" CategoryValue="floors"></item>
+		<item Category="Walls" BuiltInCategory="OST_Walls" CategoryValue="walls"></item>
+		<item Category="Interior - Ceiling (Roof)" BuiltInCategory="OST_Roofs" CategoryValue="roofs"></item>
+	</annotate>
+	<roomNameSuggestions>
+
+		<!--Minimum and Maximum vales are in % -->
+		<!--Toilet will be 5% of overall area = Room Area / Floor Plan Area : if > 5 then not a toilet-->
+
+		<roomtype Name="Toilet" minvalue="1" maxvalue="40">
+			<rule  priority="no"  category="Furniture">Urinal</rule>
+			<rule  priority="no" category="PlumbingFixtures">Toilet</rule>
+			<rule  priority="no" category="PlumbingFixtures">Toilet Cubicles</rule>
+		</roomtype>
+		<roomtype Name="Md Room" minvalue="1" maxvalue="60">
+			<rule  priority="no" category="Furniture">Sofa</rule>
+			<rule  priority="no" category="Furniture">Coffee</rule>
+			<rule  priority="no" category="Furniture">Chaise_de_Bureau</rule>
+			<rule  priority="no" category="Furniture">Chaise de Bureau</rule>
+			<rule  priority="no" category="SpecialityEquipment">Rug</rule>
+		</roomtype>
+		<roomtype Name="Breakout area" minvalue="11" maxvalue="50">
+			<rule  priority="no"  category="Furniture">Sofa</rule>
+			<rule  category="Furniture" priority="no">Coffee</rule>
+			<rule  priority="no" category="SpecialityEquipment">Rug</rule>
+			<rule  priority="no" category="Furniture">Chaise_de_Bureau</rule>
+		</roomtype>
+		<roomtype Name="Meeting Room" minvalue="21" maxvalue="50">
+			<rule  priority="no" category="Furniture">Chaise_de_Bureau</rule>
+			<rule  priority="no" category="Furniture">4US-Chaise_de_Bureau</rule>
+		</roomtype>
+		<roomtype Name="Conference Room" minvalue="1" maxvalue="80">
+			<rule  priority="no" category="Furniture">Sofa</rule>
+			<rule  category="Furniture" priority="no">Conference Table</rule>
+			<rule  priority="no" category="Furniture">Office chair</rule>
+			<rule  priority="no" category="Furniture">Office chair Lancaster Low Back</rule>
+			<rule  priority="no" category="Furniture">Chaise_de_Bureau</rule>
+		</roomtype>
+	</roomNameSuggestions>
+
+	<RoomCategory>
+		<item name="Ablution Recreation"> </item>
+		<item name="AHU"> </item>
+		<item name="Applicable to Multiple Areas"> </item>
+		<item name="Arrival Area"> </item>
+		<item name="Bigfish-Room"> </item>
+		<item name="Breakout Room"> </item>
+		<item name="BreakoutArea"> </item>
+
+		<item name="BMS and IT Rooms"> </item>
+		<item name="Board Room"> </item>
+		<item name="Cafetaria"> </item>
+		<item name="ConferenceRoom"> </item>
+		<item name="Conference Room"> </item>
+		<item name="Cloak Room"> </item>
+		<item name="Collab Areas"> </item>
+		<item name="Dishwash Area"> </item>
+		<item name="Dry Pantry"> </item>
+		<item name="Electrical Room"> </item>
+		<item name="Game Zone"> </item>
+		<item name="Glazing Wall"> </item>
+		<item name="Gym"> </item>
+		<item name="Hand Wash"> </item>
+		<item name="Hub Room"> </item>
+		<item name="Lab"> </item>
+		<item name="Live Kitchen"> </item>
+		<item name="MALE and FEMALE Prayer Rooms"> </item>
+		<item name="Md Room"> </item>
+		<item name="Meeting Room"> </item>
+		<item name="Music Room"> </item>
+		<item name="NAP Room, Mothers Room"> </item>
+		<item name="NOC Room"> </item>
+		<item name="Photo Studio"> </item>
+		<item name="Preheat Kitchen"> </item>
+		<item name="Reception"> </item>
+		<item name="Recording Room"> </item>
+		<item name="Repro"> </item>
+		<item name="Security Room"> </item>
+		<item name="Server Room"> </item>
+		<item name="Serving Area"> </item>
+		<item name="Shaft Areas"> </item>
+		<item name="Store Room"> </item>
+		<item name="Toilet"> </item>
+		<item name="Tuck Shops"> </item>
+
+		<item name="UPS and Battery Room"> </item>
+		<item name="Waiting Lounge"> </item>
+		<item name="Wet Pantry"> </item>
+		<item name="Workstation"> </item>
+		<item name="Yogaroom"> </item>
+	</RoomCategory>
+
+</mappings>
