@@ -64,8 +64,8 @@ namespace boqtakeoff.core.Libraries
                             {
                                 FileName = Path.GetFileName(s3Object.Key),
                                 S3Key = s3Object.Key,
-                                SizeInBytes = s3Object.Size,
-                                LastModified = s3Object.LastModified,
+                                SizeInBytes = s3Object.Size ?? 0,
+                                LastModified = s3Object.LastModified ?? DateTime.Now,
                                 Category = GetCategoryFromKey(s3Object.Key),
                                 FolderPath = GetFolderPath(s3Object.Key)
                             });
@@ -73,7 +73,7 @@ namespace boqtakeoff.core.Libraries
                     }
 
                     request.ContinuationToken = response.NextContinuationToken;
-                } while (response.IsTruncated);
+                } while (response.IsTruncated ?? false);
 
                 return families;
             }
@@ -187,9 +187,9 @@ namespace boqtakeoff.core.Libraries
                 return new FamilyMetadata
                 {
                     FileName = Path.GetFileName(s3Key),
-                    S3Key = s3Key,
+                    S3Key = s3Key,                    
                     SizeInBytes = response.ContentLength,
-                    LastModified = response.LastModified,
+                    LastModified = response.LastModified ?? DateTime.Now,
                     Category = GetCategoryFromKey(s3Key),
                     FolderPath = GetFolderPath(s3Key),
                     ContentType = response.Headers.ContentType
@@ -282,9 +282,6 @@ namespace boqtakeoff.core.Libraries
         }
     }
 
-    /// <summary>
-    /// Metadata for a Revit family file
-    /// </summary>
     public class FamilyMetadata
     {
         public string FileName { get; set; }
@@ -292,12 +289,12 @@ namespace boqtakeoff.core.Libraries
         public string Category { get; set; }
         public string FamilyType { get; set; }
         public string FolderPath { get; set; }
-        public long SizeInBytes { get; set; }
-        public DateTime LastModified { get; set; }
+        public long? SizeInBytes { get; set; }  // Nullable
+        public DateTime? LastModified { get; set; }  // Nullable
         public string ThumbnailUrl { get; set; }
         public string ContentType { get; set; }
 
-        public string SizeFormatted => FormatFileSize(SizeInBytes);
+        public string SizeFormatted => FormatFileSize(SizeInBytes ?? 0);  // Handle null
 
         private string FormatFileSize(long bytes)
         {
@@ -312,7 +309,7 @@ namespace boqtakeoff.core.Libraries
             return $"{len:0.##} {sizes[order]}";
         }
     }
-
+    
     /// <summary>
     /// Represents a folder node in the hierarchy
     /// </summary>

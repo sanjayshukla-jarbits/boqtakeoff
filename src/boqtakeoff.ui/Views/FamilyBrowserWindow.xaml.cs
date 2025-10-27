@@ -245,19 +245,23 @@ namespace boqtakeoff.ui.Views
         {
             if (family == null)
             {
-                txtNoSelection.Visibility = Visibility.Visible;
-                panelFamilyDetails.Visibility = Visibility.Collapsed;
+                txtNoSelection.Visibility = System.Windows.Visibility.Visible;
+                panelFamilyDetails.Visibility = System.Windows.Visibility.Collapsed;
                 return;
             }
 
-            txtNoSelection.Visibility = Visibility.Collapsed;
-            panelFamilyDetails.Visibility = Visibility.Visible;
+            txtNoSelection.Visibility = System.Windows.Visibility.Collapsed;
+            panelFamilyDetails.Visibility = System.Windows.Visibility.Visible;
 
             txtFileName.Text = family.FileName;
             txtCategory.Text = family.Category;
             txtFolderPath.Text = family.FolderPath;
             txtSize.Text = family.SizeFormatted;
-            txtLastModified.Text = family.LastModified.ToString("yyyy-MM-dd HH:mm:ss");
+
+            // ✅ FIX: Handle nullable DateTime
+            txtLastModified.Text = family.LastModified.HasValue
+                ? family.LastModified.Value.ToString("yyyy-MM-dd HH:mm:ss")
+                : "Unknown";
         }
 
         /// <summary>
@@ -363,7 +367,7 @@ namespace boqtakeoff.ui.Views
         /// </summary>
         private void ShowLoading(bool show)
         {
-            txtLoadingMessage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+            txtLoadingMessage.Visibility = show ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
         }
 
         /// <summary>

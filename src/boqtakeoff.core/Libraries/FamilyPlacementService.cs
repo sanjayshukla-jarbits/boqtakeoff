@@ -3,6 +3,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace boqtakeoff.core.Libraries
@@ -208,7 +209,7 @@ namespace boqtakeoff.core.Libraries
             try
             {
                 // Get the active view's level for host-based families
-                Level level = _doc.GetElement(_doc.ActiveView.GenLevelId) as Level;
+                Level level = _doc.GetElement(_doc.ActiveView.LevelId) as Level;
 
                 // Check if family requires a host (wall, ceiling, floor, etc.)
                 if (symbol.Family.FamilyPlacementType == FamilyPlacementType.OneLevelBased ||

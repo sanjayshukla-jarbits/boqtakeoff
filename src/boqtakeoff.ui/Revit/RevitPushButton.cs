@@ -22,8 +22,15 @@ namespace boqtakeoff.ui
             // The button name based on unique identifier.
             var btnDataName = Guid.NewGuid().ToString();
 
+            // Get the assembly that contains the command
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
             // Sets the button data.
-            var btnData = new PushButtonData(btnDataName, data.Label, CoreAssembly.GetAssemblyLocation(), data.CommandNamespacePath)
+            var btnData = new PushButtonData(
+                btnDataName, 
+                data.Label,
+                assembly.Location, 
+                data.CommandNamespacePath)
             {
                 ToolTip = data.Tooltip,
                 LargeImage = ResourceImage.GetIcon(data.IconImageName),

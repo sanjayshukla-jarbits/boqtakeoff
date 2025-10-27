@@ -4,11 +4,8 @@ using boqtakeoff.ui.Commands;
 using boqtakeoff.core;
 using System;
 
-
 namespace boqtakeoff
 {
-
-    
     /// <summary>
     /// Setup whole plugins interface with tabs, panels, buttons,...
     /// </summary>
