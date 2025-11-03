@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Reflection;
+using System.IO;
 
 namespace boqtakeoff.ui.Views
 {
@@ -38,11 +40,34 @@ namespace boqtakeoff.ui.Views
         {
             try
             {
+                // Explicitly load plugin-specific config file from the assembly directory
+                var asmDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+                var cfgPath = Path.Combine(asmDir, $"{assemblyName}.dll.config"); // "boqtakeoff.ui.dll.config"
+                // Check if config file exists before trying to open it
+                if (!File.Exists(cfgPath))
+                {
+                    throw new FileNotFoundException($"Configuration file not found: {cfgPath}. Please ensure {assemblyName}.dll.config exists in the same directory as the DLL.");
+                }
+                var map = new ExeConfigurationFileMap { ExeConfigFilename = cfgPath };
+                Configuration config;
+                try
+                {
+                    config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+                }
+                catch (FileNotFoundException fnfEx)
+                {
+                    throw new FileNotFoundException($"Failed to open configuration file: {cfgPath}. Error: {fnfEx.Message}", fnfEx);
+                }
+                catch (ConfigurationErrorsException cfgEx)
+                {
+                    throw new Exception($"Configuration file error: {cfgPath}. Error: {cfgEx.Message}", cfgEx);
+                }
                 // Read configuration from app.config
-                string bucketName = ConfigurationManager.AppSettings["AWS_S3_BucketName"];
-                string accessKey = ConfigurationManager.AppSettings["AWS_AccessKey"];
-                string secretKey = ConfigurationManager.AppSettings["AWS_SecretKey"];
-                string region = ConfigurationManager.AppSettings["AWS_S3_Region"] ?? "us-east-1";
+                string bucketName = config.AppSettings.Settings["AWS_S3_BucketName"].Value;
+                string accessKey = config.AppSettings.Settings["AWS_AccessKey"].Value;
+                string secretKey = config.AppSettings.Settings["AWS_SecretKey"].Value;
+                string region = config.AppSettings.Settings["AWS_S3_Region"].Value;
 
                 if (string.IsNullOrEmpty(bucketName) || string.IsNullOrEmpty(accessKey) || string.IsNullOrEmpty(secretKey))
                 {

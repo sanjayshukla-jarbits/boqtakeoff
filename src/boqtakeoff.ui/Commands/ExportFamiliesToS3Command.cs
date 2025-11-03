@@ -5,6 +5,7 @@ using boqtakeoff.core.Libraries;
 using System;
 using System.Configuration;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -75,13 +76,35 @@ namespace boqtakeoff.ui.Commands
 
 					if (uploadDialog == DialogResult.Yes)
 					{
-						// Upload to S3
-						string bucketName = ConfigurationManager.AppSettings["AWS_S3_BucketName"];
-						string accessKey = ConfigurationManager.AppSettings["AWS_AccessKey"];
-						string secretKey = ConfigurationManager.AppSettings["AWS_SecretKey"];
-						string region = ConfigurationManager.AppSettings["AWS_S3_Region"] ?? "us-east-1";
+                        // Explicitly load plugin-specific config file from the assembly directory
+                        var asmDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                        var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+                        var cfgPath = Path.Combine(asmDir, $"{assemblyName}.dll.config"); // "boqtakeoff.ui.dll.config"
+                        if (!File.Exists(cfgPath))
+                        {
+                            throw new FileNotFoundException($"Configuration file not found: {cfgPath}. Please ensure {assemblyName}.dll.config exists in the same directory as the DLL.");
+                        }
+                        var map = new ExeConfigurationFileMap { ExeConfigFilename = cfgPath };
+                        Configuration config;
+                        try
+                        {
+                            config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+                        }
+                        catch (FileNotFoundException fnfEx)
+                        {
+                            throw new FileNotFoundException($"Failed to open configuration file: {cfgPath}. Error: {fnfEx.Message}", fnfEx);
+                        }
+                        catch (ConfigurationErrorsException cfgEx)
+                        {
+                            throw new Exception($"Configuration file error: {cfgPath}. Error: {cfgEx.Message}", cfgEx);
+                        }
+                        // Read configuration from app.config
+                        string bucketName = config.AppSettings.Settings["AWS_S3_BucketName"].Value;
+                        string accessKey = config.AppSettings.Settings["AWS_AccessKey"].Value;
+                        string secretKey = config.AppSettings.Settings["AWS_SecretKey"].Value;
+                        string region = config.AppSettings.Settings["AWS_S3_Region"].Value;
 
-						var uploadService = new S3FamilyUploadService(bucketName, accessKey, secretKey, region);
+                        var uploadService = new S3FamilyUploadService(bucketName, accessKey, secretKey, region);
 
 						progressForm = new System.Windows.Forms.Form
 						{

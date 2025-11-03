@@ -64,8 +64,8 @@ namespace boqtakeoff.core.Libraries
                             {
                                 FileName = Path.GetFileName(s3Object.Key),
                                 S3Key = s3Object.Key,
-                                SizeInBytes = s3Object.Size ?? 0,
-                                LastModified = s3Object.LastModified ?? DateTime.Now,
+                                SizeInBytes = s3Object.Size,
+                                LastModified = s3Object.LastModified,
                                 Category = GetCategoryFromKey(s3Object.Key),
                                 FolderPath = GetFolderPath(s3Object.Key)
                             });
@@ -73,7 +73,7 @@ namespace boqtakeoff.core.Libraries
                     }
 
                     request.ContinuationToken = response.NextContinuationToken;
-                } while (response.IsTruncated ?? false);
+                } while (response.IsTruncated);
 
                 return families;
             }
@@ -189,7 +189,7 @@ namespace boqtakeoff.core.Libraries
                     FileName = Path.GetFileName(s3Key),
                     S3Key = s3Key,                    
                     SizeInBytes = response.ContentLength,
-                    LastModified = response.LastModified ?? DateTime.Now,
+                    LastModified = response.LastModified ,
                     Category = GetCategoryFromKey(s3Key),
                     FolderPath = GetFolderPath(s3Key),
                     ContentType = response.Headers.ContentType
