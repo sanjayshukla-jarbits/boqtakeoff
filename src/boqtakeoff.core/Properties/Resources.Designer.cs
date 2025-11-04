@@ -106,6 +106,24 @@ namespace boqtakeoff.core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://creator.zoho.in/api/v2/bigfish.central/projectforms/report/Drawing_Schedule_Subform_Report.
+        /// </summary>
+        internal static string _get_drawing_record_details_url {
+            get {
+                return ResourceManager.GetString("_get_drawing_record_details_url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://creator.zoho.in/api/v2/bigfish.central/projectforms/report/All_Drawing_Schedules1.
+        /// </summary>
+        internal static string _get_drawing_records_in_schedule_url {
+            get {
+                return ResourceManager.GetString("_get_drawing_records_in_schedule_url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://creator.zoho.in/api/v2/bigfish.central/packages/report/All_Project_Details.
         /// </summary>
         internal static string _get_project_uid_url {

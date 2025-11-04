@@ -65,13 +65,63 @@ namespace boqtakeoff.core
         public string project_group_name { get; set; }
         public string project_name { get; set; }
     }
-
-
+    
     public class getProjectDetailsAPIResponse
     {
         public int code { get; set; }
         public IList<getProjectDetails> data { get; set; }
         public string description { get; set; }
+    }
+
+    public class DesignScheduleRecord
+    {
+        public string display_value { get; set; }
+        public string ID { get; set; }
+    }
+
+    public class getProjectDrawingRecordDetails
+    {
+        public string user_email { get; set; }
+        public IList<DesignScheduleRecord> design_schedule { get; set; }
+    }
+
+    public class getDetailedDrawingMainFormAPIResponse
+    {
+        public int code { get; set; }
+        public IList<getProjectDrawingRecordDetails> data { get; set; }
+        public string description { get; set; }
+    }
+
+    public class getDetailedDrawingSubFormAPIResponse
+    {
+        public int code { get; set; }
+        public IList<getDetailedDrawingDetails> data { get; set; }
+    }
+
+    public class getDetailedDrawingDetails
+    {
+        public string Approved_on_by_Project_director_design { get; set; }
+        public string Progress { get; set; }
+        public string Submission_date { get; set; }
+        public string Planned_Start_Date { get; set; }
+        public string Description { get; set; }
+        public string Project_Specificity { get; set; }
+        public string action_field { get; set; }
+        public string Drawing_Number { get; set; }
+        public string TAT_timeline { get; set; }
+        public string Upload_Due_date { get; set; }
+        public string Approval_status_by_Project_director_design { get; set; }
+        public string Remark { get; set; }
+        public string Digital_Designer_Name { get; set; }
+        public string Working_date { get; set; }
+        public string actual_date { get; set; }
+        public string project_id { get; set; }
+        public string Version { get; set; }
+        public string Design_File { get; set; }
+        public string ID { get; set; }
+        public string New_File_Uploaded { get; set; }
+        public string Submit1 { get; set; }
+       
     }
 
 
@@ -227,6 +277,10 @@ namespace boqtakeoff.core
         static readonly string _get_boq_version_details_url = Properties.Resources._get_boq_version_details_url;
         static readonly string _get_project_uid_url = Properties.Resources._get_project_uid_url;
         static readonly string _get_bf_error_log_url = Properties.Resources._get_bf_error_log_url;
+
+        static readonly string _get_drawing_records_in_schedule_url = Properties.Resources._get_drawing_records_in_schedule_url;
+        static readonly string _get_drawing_record_details_url = Properties.Resources._get_drawing_record_details_url;
+
         static Hashtable errorMappings = new Hashtable();
         /// <summary>
         /// HTTP access constant to toggle 
@@ -365,6 +419,120 @@ namespace boqtakeoff.core
             //return response.StatusCode;
             // TaskDialog.Show("error_log_list_obj ... ", error_log_list_obj[0].sku_label.ToString());
             return error_log_list_obj;
+        }
+
+        public static List<DesignScheduleRecord> getDrawingScheduleDetailsList(string project_id, string access_token)
+        {
+            int max_itr = 10;
+            int query_range = 200;
+            string criteria = "project_id == " + project_id;
+
+            List<getProjectDrawingRecordDetails> drawing_record_details = new List<getProjectDrawingRecordDetails>();
+            List<DesignScheduleRecord> drawing_schedule_details_list = new List<DesignScheduleRecord>();
+
+            for (int i = 0; i < max_itr; i++)
+            {
+                int from = i * query_range + 1;
+                int limit = query_range;
+                string get_url = _get_drawing_records_in_schedule_url + "?from=" + from + "&limit=" + limit + "&criteria=" + criteria;
+                string auth_token = "Zoho-oauthtoken " + access_token;
+
+                var client = new RestClient(get_url);
+                var request = new RestRequest(get_url, Method.Get);
+                request.AddHeader("Authorization", auth_token);
+
+                var response = client.Execute(request);
+
+                var content_obj = JsonSerializer.Deserialize<getDetailedDrawingMainFormAPIResponse>(response.Content);
+
+                if (content_obj == null)
+                    break;
+
+                int response_code = content_obj.code;
+
+                if (response_code == 3000)
+                {
+                    var dataList = content_obj.data;
+                    if (dataList != null && dataList.Count > 0)
+                    {
+                        drawing_record_details.AddRange(dataList);
+
+                        foreach (var record in dataList)
+                        {
+                            if (record.design_schedule != null)
+                                drawing_schedule_details_list.AddRange(record.design_schedule);
+                        }
+                    }
+                }
+                else if (response_code == 3100)
+                {
+                    break; // End of data
+                }
+                else
+                {
+                    MessageBox.Show(content_obj.description, "Response from Bigfish Project List ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                }
+            }
+
+            return drawing_schedule_details_list;
+        }
+
+        public void getDrawingSchedule(string project_id)
+        {
+            try
+            {
+                string access_token = BigFishRestAPIs.get_access_token();
+                List<DesignScheduleRecord> drawing_record_list = getDrawingScheduleDetailsList(project_id, access_token);
+                List<getDetailedDrawingDetails> detailed_drawing_details = new List<getDetailedDrawingDetails>();
+                
+                foreach (DesignScheduleRecord curr_project_data in drawing_record_list)
+                {
+                    string record_id = curr_project_data.ID;
+                    string criteria = "ID == " + record_id;
+
+                    int from = 0;
+                    int limit = 1;
+                    string get_url = _get_drawing_record_details_url + "?from=" + from + "&limit=" + limit + "&criteria=" + criteria;
+                    string auth_token = "Zoho-oauthtoken " + access_token;
+
+                    var client = new RestClient(get_url);
+                    var request = new RestRequest(get_url, Method.Get);
+                    request.AddHeader("Authorization", auth_token);
+
+                    var response = client.Execute(request);
+
+                    var content_obj = JsonSerializer.Deserialize<getDetailedDrawingSubFormAPIResponse>(response.Content);
+
+                    if (content_obj == null)
+                        break;
+
+                    int response_code = content_obj.code;
+
+                    if (response_code == 3000)
+                    {
+                        var dataList = content_obj.data;
+                        if (dataList != null && dataList.Count > 0)
+                        {
+                            detailed_drawing_details.AddRange(dataList);
+
+                        }
+                    }
+                    else if (response_code == 3100)
+                    {
+                        break; // End of data
+                    }
+                    else
+                    {
+                        // MessageBox.Show(content_obj.description, "Response from Bigfish Project List ...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Utility.Logger(exp);
+            }
         }
 
         public static List<getProjectDetails> getProjectNameList(string access_token)

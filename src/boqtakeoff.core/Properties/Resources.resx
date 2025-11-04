@@ -252,4 +252,10 @@
     <value> Interior - Floor, Interior - Partition, Interior - Ceiling, Interior - Door, Interior - Speciality Equipment, Interior - Glass Partition, Interior - Furniture, Interior - Profile &amp; Generic Elements, Interior - Lintels, Interior - Joinery, MEP - Duct, MEP - Duct Fitting, MEP - HVAC, MEP - Mechanical Equipment, MEP - Fire Pipe, MEP - Sprinkler, MEP - Fire Alarm, MEP - Electrical Fixture, MEP - Lighting Fixture, MEP - Communication Device, MEP - Cable Tray</value>
     <comment>Interior design,Floor,Partition,Ceiling,Door,Speciality Equipment,Glass Partition,Furniture,Profile &amp; Generic Elements,Lintels,Joinery,MEP,Duct,Duct Fitting,HVAC,Mechanical Equipment,Fire Pipe,Sprinkler,Fire Alarm,Electrical Fixture,Lighting Fixture,Communication Device,Cable Tray</comment>
   </data>
+  <data name="_get_drawing_records_in_schedule_url" xml:space="preserve">
+    <value>https://creator.zoho.in/api/v2/bigfish.central/projectforms/report/All_Drawing_Schedules1</value>
+  </data>
+  <data name="_get_drawing_record_details_url" xml:space="preserve">
+    <value>https://creator.zoho.in/api/v2/bigfish.central/projectforms/report/Drawing_Schedule_Subform_Report</value>
+  </data>
 </root>

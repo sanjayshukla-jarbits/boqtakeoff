@@ -111,6 +111,20 @@ namespace boqtakeoff
 
             // Add Export Families to S3 Button
             AddExportFamiliesToS3Button(bimLibraryPanel);
+
+            SMIBoqPanel.AddSeparator();
+
+            var DrawingScheduleCommandData = new RevitPushButtonDataModel
+            {
+                Label = "Drawing Schedule",
+                Panel = SMIBoqPanel,
+                Tooltip = "View and manage drawing schedules from BigFish",
+                CommandNamespacePath = ShowDrawingScheduleCommand.GetPath(),
+                IconImageName = "icon_ShowFamilyManager_32x32.png",
+                TooltipImageName = "icon_ShowFamilyManager_32x32.png"
+            };
+
+            RevitPushButton.Create(DrawingScheduleCommandData);
         }
 
         /// <summary>
@@ -164,4 +178,5 @@ namespace boqtakeoff
         }
         #endregion
     }
+
 }
