@@ -1,5 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
+using boqtakeoff.core;
 using boqtakeoff.core.Libraries;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Reflection;
 using System.IO;
+using System.Windows.Threading;
 
 namespace boqtakeoff.ui.Views
 {
@@ -18,9 +21,10 @@ namespace boqtakeoff.ui.Views
         private readonly Document _doc;
         private readonly UIDocument _uidoc;
         private S3FamilyLibraryService _s3Service;
-        private FamilyPlacementService _placementService;
         private List<FamilyMetadata> _allFamilies;
         private FamilyMetadata _selectedFamily;
+        private readonly LoadFamilyEventHandler _loadFamilyHandler;
+        private readonly ExternalEvent _loadFamilyEvent;
 
         public FamilyBrowserWindow(ExternalCommandData commandData)
         {
@@ -28,6 +32,10 @@ namespace boqtakeoff.ui.Views
 
             _doc = commandData.Application.ActiveUIDocument.Document;
             _uidoc = commandData.Application.ActiveUIDocument;
+
+            // Initialize ExternalEvent for Revit API operations
+            _loadFamilyHandler = new LoadFamilyEventHandler();
+            _loadFamilyEvent = ExternalEvent.Create(_loadFamilyHandler);
 
             InitializeServices();
             LoadFamiliesAsync();
@@ -75,7 +83,6 @@ namespace boqtakeoff.ui.Views
                 }
 
                 _s3Service = new S3FamilyLibraryService(bucketName, accessKey, secretKey, region);
-                _placementService = new FamilyPlacementService(_doc, _uidoc, _s3Service);
 
                 UpdateStatus("Services initialized successfully");
             }
@@ -342,6 +349,7 @@ namespace boqtakeoff.ui.Views
                 MessageBox.Show("Please select a family first", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
+            string tempFilePath = null;
 
             try
             {
@@ -351,22 +359,58 @@ namespace boqtakeoff.ui.Views
                 // Hide window temporarily so user can see Revit view
                 this.Hide();
 
-                // Load and place family
-                bool success = await _placementService.LoadAndPlaceFamilyAsync(_selectedFamily);
+                // Download family first (async operation)
+                // Resume on UI thread after await to safely access WPF controls
+                tempFilePath = await _s3Service.DownloadFamilyAsync(_selectedFamily.S3Key);
 
-                // Show window again
-                this.Show();
-                btnAddToProject.IsEnabled = true;
+                // Validate file
+                if (!File.Exists(tempFilePath))
+                {
+                    throw new Exception("Failed to download family file");
+                }
+
+                // Validate it's a Revit family file
+                if (!tempFilePath.EndsWith(".rfa", StringComparison.OrdinalIgnoreCase) || 
+                    new FileInfo(tempFilePath).Length == 0)
+                {
+                    throw new Exception("Invalid Revit family file");
+                }
+
+                // Use ExternalEvent to execute Revit API operations in the correct context
+                // This is the proper way to handle Revit API calls from async operations
+                var tcs = new TaskCompletionSource<bool>();
+
+                // Set data for the event handler
+                _loadFamilyHandler.SetData(tempFilePath, _uidoc, tcs);
+
+                // Raise the external event - this queues the operation to run in Revit API context
+                _loadFamilyEvent.Raise();
+
+                // Wait for the operation to complete
+                bool success = await tcs.Task;
+
+                // Show window again on UI thread and re-enable button
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    this.Show();
+                    btnAddToProject.IsEnabled = true;
+                }, DispatcherPriority.Send);
 
                 if (success)
                 {
-                    UpdateStatus($"Successfully added {_selectedFamily.FileName}");
-                    MessageBox.Show($"Family '{_selectedFamily.FileName}' has been added to the project",
-                        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        UpdateStatus($"Successfully added {_selectedFamily.FileName}");
+                        MessageBox.Show($"Family '{_selectedFamily.FileName}' has been added to the project",
+                            "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }, DispatcherPriority.Background);
                 }
                 else
                 {
-                    UpdateStatus("Operation cancelled or failed");
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        UpdateStatus("Operation cancelled or failed");
+                    }, DispatcherPriority.Background);
                 }
             }
             catch (Exception ex)
@@ -376,6 +420,21 @@ namespace boqtakeoff.ui.Views
                 UpdateStatus("Error adding family");
                 MessageBox.Show($"Error adding family: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Utility.Logger(ex);
+            }
+            finally
+            {
+                // Clean up temp file
+                if (!string.IsNullOrEmpty(tempFilePath) && File.Exists(tempFilePath))
+                {
+                    try
+                    {
+                        File.Delete(tempFilePath);
+                    }
+                    catch
+                    {
+                        // Ignore cleanup errors
+                    }
+                }
             }
         }
 

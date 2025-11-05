@@ -183,6 +183,7 @@
     <Compile Include="Views\FamilyBrowserWindow.xaml.cs">
       <DependentUpon>FamilyBrowserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LoadFamilyEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\FamilyBrowserWindow.xaml">

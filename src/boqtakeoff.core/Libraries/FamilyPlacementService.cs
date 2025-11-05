@@ -29,6 +29,8 @@ namespace boqtakeoff.core.Libraries
 
         /// <summary>
         /// Load family from S3 and place at user-selected location
+        /// NOTE: This method must be called from the UI thread that has Revit API context.
+        /// Do NOT use ConfigureAwait(false) here because Revit API calls must run on the original thread.
         /// </summary>
         /// <param name="familyMetadata">Family metadata from S3</param>
         /// <returns>True if successful</returns>
@@ -39,6 +41,8 @@ namespace boqtakeoff.core.Libraries
             try
             {
                 // 1. Download family from S3
+                // IMPORTANT: Do NOT use ConfigureAwait(false) here because we need to continue
+                // on the UI thread for Revit API operations below
                 tempFilePath = await _s3Service.DownloadFamilyAsync(familyMetadata.S3Key);
 
                 if (!File.Exists(tempFilePath))
@@ -52,7 +56,9 @@ namespace boqtakeoff.core.Libraries
                     throw new Exception("Invalid Revit family file");
                 }
 
-                // 3. Get user click location
+                // 3. Get user click location (must be called from Revit API context)
+                // Note: GetUserClickLocation and LoadAndPlaceFamily must run synchronously
+                // on the UI thread that has access to Revit API
                 XYZ placementPoint = GetUserClickLocation();
                 
                 if (placementPoint == null)
@@ -61,7 +67,7 @@ namespace boqtakeoff.core.Libraries
                     return false;
                 }
 
-                // 4. Load and place family
+                // 4. Load and place family (must be called from Revit API context)
                 bool success = LoadAndPlaceFamily(tempFilePath, placementPoint);
 
                 return success;
@@ -96,9 +102,21 @@ namespace boqtakeoff.core.Libraries
 
         /// <summary>
         /// Load family and place instance at specified location
+        /// NOTE: This method must be called from the Revit API context (UI thread)
         /// </summary>
         private bool LoadAndPlaceFamily(string familyPath, XYZ location)
         {
+            // Ensure we're on the correct thread for Revit API operations
+            // Check if document is valid and accessible
+            if (_doc == null || _doc.IsValidObject == false)
+            {
+                throw new InvalidOperationException("Document is not valid or accessible");
+            }
+
+            // Ensure we're on the UI thread - Transaction.Start() requires Revit API context
+            // This check helps debug if called from wrong thread, but can't prevent the error
+            // The actual fix is ensuring this method is only called from UI thread context
+            
             using (Transaction trans = new Transaction(_doc, "Load and Place Family"))
             {
                 trans.Start();
