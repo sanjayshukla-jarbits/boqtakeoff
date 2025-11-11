@@ -25,6 +25,7 @@ namespace boqtakeoff.ui.Views
         private FamilyMetadata _selectedFamily;
         private readonly LoadFamilyEventHandler _loadFamilyHandler;
         private readonly ExternalEvent _loadFamilyEvent;
+        private StackPanel _panelMetadata;
 
         public FamilyBrowserWindow(ExternalCommandData commandData)
         {
@@ -37,61 +38,64 @@ namespace boqtakeoff.ui.Views
             _loadFamilyHandler = new LoadFamilyEventHandler();
             _loadFamilyEvent = ExternalEvent.Create(_loadFamilyHandler);
 
-            InitializeServices();
+            // InitializeServices();
+            _s3Service = new S3FamilyLibraryService();
+            _panelMetadata = FindName("panelMetadata") as StackPanel;
             LoadFamiliesAsync();
         }
 
         /// <summary>
         /// Initialize S3 and placement services
+        /// This code is moved to the "S3FamilyLibraryService"
         /// </summary>
-        private void InitializeServices()
-        {
-            try
-            {
-                // Explicitly load plugin-specific config file from the assembly directory
-                var asmDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-                var cfgPath = Path.Combine(asmDir, $"{assemblyName}.dll.config"); // "boqtakeoff.ui.dll.config"
-                // Check if config file exists before trying to open it
-                if (!File.Exists(cfgPath))
-                {
-                    throw new FileNotFoundException($"Configuration file not found: {cfgPath}. Please ensure {assemblyName}.dll.config exists in the same directory as the DLL.");
-                }
-                var map = new ExeConfigurationFileMap { ExeConfigFilename = cfgPath };
-                Configuration config;
-                try
-                {
-                    config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-                }
-                catch (FileNotFoundException fnfEx)
-                {
-                    throw new FileNotFoundException($"Failed to open configuration file: {cfgPath}. Error: {fnfEx.Message}", fnfEx);
-                }
-                catch (ConfigurationErrorsException cfgEx)
-                {
-                    throw new Exception($"Configuration file error: {cfgPath}. Error: {cfgEx.Message}", cfgEx);
-                }
-                // Read configuration from app.config
-                string bucketName = config.AppSettings.Settings["AWS_S3_BucketName"].Value;
-                string accessKey = config.AppSettings.Settings["AWS_AccessKey"].Value;
-                string secretKey = config.AppSettings.Settings["AWS_SecretKey"].Value;
-                string region = config.AppSettings.Settings["AWS_S3_Region"].Value;
+        // private void InitializeServices()
+        // {
+        //     try
+        //     {
+        //         // Explicitly load plugin-specific config file from the assembly directory
+        //         var asmDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        //         var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+        //         var cfgPath = Path.Combine(asmDir, $"{assemblyName}.dll.config"); // "boqtakeoff.ui.dll.config"
+        //         // Check if config file exists before trying to open it
+        //         if (!File.Exists(cfgPath))
+        //         {
+        //             throw new FileNotFoundException($"Configuration file not found: {cfgPath}. Please ensure {assemblyName}.dll.config exists in the same directory as the DLL.");
+        //         }
+        //         var map = new ExeConfigurationFileMap { ExeConfigFilename = cfgPath };
+        //         Configuration config;
+        //         try
+        //         {
+        //             config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+        //         }
+        //         catch (FileNotFoundException fnfEx)
+        //         {
+        //             throw new FileNotFoundException($"Failed to open configuration file: {cfgPath}. Error: {fnfEx.Message}", fnfEx);
+        //         }
+        //         catch (ConfigurationErrorsException cfgEx)
+        //         {
+        //             throw new Exception($"Configuration file error: {cfgPath}. Error: {cfgEx.Message}", cfgEx);
+        //         }
+        //         // Read configuration from app.config
+        //         string bucketName = config.AppSettings.Settings["AWS_S3_BucketName"].Value;
+        //         string accessKey = config.AppSettings.Settings["AWS_AccessKey"].Value;
+        //         string secretKey = config.AppSettings.Settings["AWS_SecretKey"].Value;
+        //         string region = config.AppSettings.Settings["AWS_S3_Region"].Value;
 
-                if (string.IsNullOrEmpty(bucketName) || string.IsNullOrEmpty(accessKey) || string.IsNullOrEmpty(secretKey))
-                {
-                    throw new Exception("AWS configuration not found in app.config");
-                }
+        //         if (string.IsNullOrEmpty(bucketName) || string.IsNullOrEmpty(accessKey) || string.IsNullOrEmpty(secretKey))
+        //         {
+        //             throw new Exception("AWS configuration not found in app.config");
+        //         }
 
-                _s3Service = new S3FamilyLibraryService(bucketName, accessKey, secretKey, region);
+        //         _s3Service = new S3FamilyLibraryService(bucketName, accessKey, secretKey, region);
 
-                UpdateStatus("Services initialized successfully");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error initializing services: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Utility.Logger(ex);
-            }
-        }
+        //         UpdateStatus("Services initialized successfully");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         MessageBox.Show($"Error initializing services: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //         Utility.Logger(ex);
+        //     }
+        // }
 
         /// <summary>
         /// Load families from S3
@@ -104,12 +108,20 @@ namespace boqtakeoff.ui.Views
                 UpdateStatus("Loading families from library...");
 
                 // Load folder structure
-                var folders = await _s3Service.GetFolderStructureAsync();
+                //var folders = await _s3Service.GetFolderStructureAsync();
+                await XmlReaderService.InitializeAsync();
+                var xmlService = XmlReaderService.Instance;
+                var folders = xmlService.GetAllRootCategories().ToList();
                 PopulateFolderTree(folders);
+                var topFolderName = "";
+                if (folders.Count > 0)
+                {
+                    topFolderName = folders[0].Name;
+                }
 
                 // Load all families
-                _allFamilies = await _s3Service.GetFamilyListAsync();
-
+                //_allFamilies = await _s3Service.GetFamilyListAsync();
+                _allFamilies = xmlService.ReadFamiliesByCategory(categoryName: topFolderName).ToList();
                 UpdateFamilyList(_allFamilies);
                 UpdateStatus($"Loaded {_allFamilies.Count} families");
 
@@ -214,7 +226,7 @@ namespace boqtakeoff.ui.Views
         /// <summary>
         /// Folder selection changed
         /// </summary>
-        private void treeViewFolders_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private async void treeViewFolders_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             try
             {
@@ -232,12 +244,16 @@ namespace boqtakeoff.ui.Views
                 else
                 {
                     // Filter by folder
-                    var filteredFamilies = _allFamilies
-                        .Where(f => f.FolderPath.StartsWith(folder.FullPath))
-                        .ToList();
-
-                    UpdateFamilyList(filteredFamilies);
-                    UpdateStatus($"Showing {filteredFamilies.Count} families in {folder.Name}");
+                    //var filteredFamilies = _allFamilies
+                    //    .Where(f => f.FolderPath.StartsWith(folder.FullPath))
+                    //    .ToList();
+                    var topFolderName = folder.Name;
+                    await XmlReaderService.InitializeAsync();
+                    var xmlService = XmlReaderService.Instance;
+                    var filteredFamilies = xmlService.ReadFamiliesByCategory(categoryName: topFolderName);
+                    var filteredFamilyList = filteredFamilies.ToList();
+                    UpdateFamilyList(filteredFamilyList);
+                    UpdateStatus($"Showing {filteredFamilyList.Count} families in {folder.Name}");
                 }
             }
             catch (Exception ex)
@@ -294,6 +310,61 @@ namespace boqtakeoff.ui.Views
             txtLastModified.Text = family.LastModified.HasValue
                 ? family.LastModified.Value.ToString("yyyy-MM-dd HH:mm:ss")
                 : "Unknown";
+
+            // Populate metadata parameters dynamically
+            PopulateMetadata(family);
+        }
+
+        /// <summary>
+        /// Populate metadata TextBlocks dynamically from FamilyMetadata
+        /// </summary>
+        private void PopulateMetadata(FamilyMetadata family)
+        {
+            // Clear existing metadata TextBlocks
+            if (_panelMetadata == null)
+            {
+                _panelMetadata = FindName("panelMetadata") as StackPanel;
+                if (_panelMetadata == null)
+                {
+                    return;
+                }
+            }
+
+            _panelMetadata.Children.Clear();
+
+            // Check if metadata exists and has items
+            if (family.metadata == null || family.metadata.Count == 0)
+            {
+                txtParametersHeader.Visibility = System.Windows.Visibility.Collapsed;
+                _panelMetadata.Visibility = System.Windows.Visibility.Collapsed;
+                return;
+            }
+
+            // Show parameters header and metadata panel
+            txtParametersHeader.Visibility = System.Windows.Visibility.Visible;
+            _panelMetadata.Visibility = System.Windows.Visibility.Visible;
+
+            // Create TextBlocks for each metadata parameter
+            foreach (var kvp in family.metadata)
+            {
+                // Parameter name label
+                var nameTextBlock = new TextBlock
+                {
+                    Text = $"{kvp.Key}:",
+                    FontWeight = FontWeights.SemiBold,
+                    Margin = new Thickness(0, 5, 0, 2)
+                };
+                _panelMetadata.Children.Add(nameTextBlock);
+
+                // Parameter value
+                var valueTextBlock = new TextBlock
+                {
+                    Text = kvp.Value ?? string.Empty,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(0, 0, 0, 10)
+                };
+                _panelMetadata.Children.Add(valueTextBlock);
+            }
         }
 
         /// <summary>

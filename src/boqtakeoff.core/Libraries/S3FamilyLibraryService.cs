@@ -3,9 +3,12 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace boqtakeoff.core.Libraries
 {
@@ -17,6 +20,7 @@ namespace boqtakeoff.core.Libraries
         private readonly IAmazonS3 _s3Client;
         private readonly string _bucketName;
         private readonly string _tempDownloadPath;
+        private string _indexFileName = "revitFolder.xml";
 
         public S3FamilyLibraryService(string bucketName, string accessKey, string secretKey, string region)
         {
@@ -33,6 +37,62 @@ namespace boqtakeoff.core.Libraries
             var regionEndpoint = RegionEndpoint.GetBySystemName(region);
             _s3Client = new AmazonS3Client(accessKey, secretKey, regionEndpoint);
         }
+
+        public S3FamilyLibraryService()
+        {
+            try
+            {
+                _tempDownloadPath = Path.Combine(Path.GetTempPath(), "BIMLibrary");
+                // Create temp directory if it doesn't exist
+                if (!Directory.Exists(_tempDownloadPath))
+                {
+                    Directory.CreateDirectory(_tempDownloadPath);
+                }
+                // Explicitly load plugin-specific config file from the assembly directory
+                var asmDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+                var cfgPath = Path.Combine(asmDir, $"{assemblyName}.dll.config"); // "boqtakeoff.ui.dll.config"
+                // Check if config file exists before trying to open it
+                if (!File.Exists(cfgPath))
+                {
+                    throw new FileNotFoundException($"Configuration file not found: {cfgPath}. Please ensure {assemblyName}.dll.config exists in the same directory as the DLL.");
+                }
+                var map = new ExeConfigurationFileMap { ExeConfigFilename = cfgPath };
+                Configuration config;
+                try
+                {
+                    config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+                }
+                catch (FileNotFoundException fnfEx)
+                {
+                    throw new FileNotFoundException($"Failed to open configuration file: {cfgPath}. Error: {fnfEx.Message}", fnfEx);
+                }
+                catch (ConfigurationErrorsException cfgEx)
+                {
+                    throw new Exception($"Configuration file error: {cfgPath}. Error: {cfgEx.Message}", cfgEx);
+                }
+                // Read configuration from app.config
+                string bucketName = config.AppSettings.Settings["AWS_S3_BucketName"].Value;
+                string accessKey = config.AppSettings.Settings["AWS_AccessKey"].Value;
+                string secretKey = config.AppSettings.Settings["AWS_SecretKey"].Value;
+                string region = config.AppSettings.Settings["AWS_S3_Region"].Value;
+
+                _bucketName = bucketName;
+
+                if (string.IsNullOrEmpty(bucketName) || string.IsNullOrEmpty(accessKey) || string.IsNullOrEmpty(secretKey))
+                {
+                    throw new Exception("AWS configuration not found in app.config");
+                }
+                var regionEndpoint = RegionEndpoint.GetBySystemName(region);
+                _s3Client = new AmazonS3Client(accessKey, secretKey, regionEndpoint);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error initializing services: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Utility.Logger(ex);
+            }
+        }
+        
 
         /// <summary>
         /// Get list of all families in the library organized by folders
@@ -167,6 +227,35 @@ namespace boqtakeoff.core.Libraries
             }
         }
 
+        public async Task<string> DownloadFamilyIndexFileFromS3Async()
+        {
+            try
+            {
+                var indexFilePath = Path.Combine(_tempDownloadPath, _indexFileName);
+                // Delete existing file if it exists
+                if (File.Exists(indexFilePath))
+                {
+                    File.Delete(indexFilePath);
+                }
+                var request = new GetObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = _indexFileName
+                };
+                using (var response = await _s3Client.GetObjectAsync(request))
+                using (var fileStream = File.Create(indexFilePath))
+                {
+                    await response.ResponseStream.CopyToAsync(fileStream);
+                }
+                return indexFilePath;
+            }
+            catch (Exception ex)
+            {
+                Utility.Logger(ex);
+                throw new Exception($"Error downloading family from S3: {ex.Message}", ex);
+            }
+        }
+
         /// <summary>
         /// Get metadata for a specific family
         /// </summary>
@@ -293,6 +382,8 @@ namespace boqtakeoff.core.Libraries
         public DateTime? LastModified { get; set; }  // Nullable
         public string ThumbnailUrl { get; set; }
         public string ContentType { get; set; }
+
+        public Dictionary<string, string> metadata { get;set;}
 
         public string SizeFormatted => FormatFileSize(SizeInBytes ?? 0);  // Handle null
 
