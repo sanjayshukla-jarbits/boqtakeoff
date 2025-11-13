@@ -20,4 +20,24 @@
 		<VendorDescription>BigFish Tools</VendorDescription>
 		<VisibilityMode>AlwaysVisible</VisibilityMode>
 	</AddIn>
+	<AddIn Type="Command">
+		<Text>Export Families</Text>
+		<Description>Export Families to local directory</Description>
+		<Assembly>C:\dev\git\revit\boqtakeoff\src\boqtakeoff.core\bin\Debug\boqtakeoff.core.dll</Assembly>
+		<FullClassName>boqtakeoff.core.Libraries.ExportFamiliesCommand</FullClassName>
+		<ClientId>8A9B6FD2-AF1D-4C13-8CA4-5B6B6382E433</ClientId>
+		<VendorId>BigFish</VendorId>
+		<VendorDescription>BigFish Tools</VendorDescription>
+		<VisibilityMode>AlwaysVisible</VisibilityMode>
+	</AddIn>
+	<AddIn Type="Command">
+		<Text>Export CSV/XML Family Files</Text>
+		<Description>Export CSV/XML Family Files to local directory</Description>
+		<Assembly>C:\dev\git\revit\boqtakeoff\src\boqtakeoff.core\bin\Debug\boqtakeoff.core.dll</Assembly>
+		<FullClassName>boqtakeoff.core.Libraries.ExportFamiliesAsCSVXMLCommand</FullClassName>
+		<ClientId>07FB5BA5-FF47-44B1-A4E6-AD564D26B40C</ClientId>
+		<VendorId>BigFish</VendorId>
+		<VendorDescription>BigFish Tools</VendorDescription>
+		<VisibilityMode>AlwaysVisible</VisibilityMode>
+	</AddIn>
 </RevitAddIns>

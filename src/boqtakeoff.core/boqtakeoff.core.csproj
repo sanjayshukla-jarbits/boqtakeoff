@@ -277,6 +277,8 @@
     <Compile Include="LargeImage.Designer.cs">
       <DependentUpon>LargeImage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Libraries\ExportFamiliesAsCSVXMLCommand.cs" />
+    <Compile Include="Libraries\ExportFamiliesCommand.cs" />
     <Compile Include="Libraries\FamilyExportService.cs" />
     <Compile Include="Libraries\S3FamilyUploadService.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
