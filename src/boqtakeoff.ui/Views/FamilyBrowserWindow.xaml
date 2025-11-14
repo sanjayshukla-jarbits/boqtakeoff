@@ -233,13 +233,8 @@
                                           x:Name="txtParametersHeader" 
                                           Visibility="Collapsed"/>
                                 
-                                <!-- Scrollable metadata panel with max height -->
-                                <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                                            HorizontalScrollBarVisibility="Disabled"
-                                            MaxHeight="300"
-                                            Margin="0,0,0,10">
-                                    <StackPanel x:Name="panelMetadata"/>
-                                </ScrollViewer>
+                                <!-- Metadata panel -->
+                                <StackPanel x:Name="panelMetadata" Margin="0,0,0,10"/>
 
                                 <Button x:Name="btnAddToProject"
                                        Content="Add to Project"

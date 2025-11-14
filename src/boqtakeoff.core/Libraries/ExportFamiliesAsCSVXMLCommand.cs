@@ -393,29 +393,29 @@ namespace boqtakeoff.core.Libraries
 
                         // Get file size (if family file is accessible)
                         long fileSize = 0;
-                        try
-                        {
-                            if (familyInfo.Family.IsEditable && !familyInfo.Family.IsInPlace)
-                            {
-                                // Try to get family document path
-                                Document familyDoc = _doc.EditFamily(familyInfo.Family);
-                                if (familyDoc != null)
-                                {
-                                    string familyPath = familyDoc.PathName;
-                                    if (!string.IsNullOrEmpty(familyPath) && File.Exists(familyPath))
-                                    {
-                                        FileInfo fileInfo = new FileInfo(familyPath);
-                                        fileSize = fileInfo.Length;
-                                    }
-                                    familyDoc.Close(false);
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            // If we can't get file size, use default
-                            fileSize = 123456; // Default size similar to example XML
-                        }
+                        //try
+                        //{
+                        //    if (familyInfo.Family.IsEditable && !familyInfo.Family.IsInPlace)
+                        //    {
+                        //        // Try to get family document path
+                        //        Document familyDoc = _doc.EditFamily(familyInfo.Family);
+                        //        if (familyDoc != null)
+                        //        {
+                        //            string familyPath = familyDoc.PathName;
+                        //            if (!string.IsNullOrEmpty(familyPath) && File.Exists(familyPath))
+                        //            {
+                        //                FileInfo fileInfo = new FileInfo(familyPath);
+                        //                fileSize = fileInfo.Length;
+                        //            }
+                        //            familyDoc.Close(false);
+                        //        }
+                        //    }
+                        //}
+                        //catch
+                        //{
+                        //    // If we can't get file size, use default
+                        //    fileSize = 123456; // Default size similar to example XML
+                        //}
 
                         // Build file path
                         string filePath = $"{categoryGroup.Key}/{familyInfo.FamilyName}.rfa";
@@ -435,14 +435,21 @@ namespace boqtakeoff.core.Libraries
                         // Add Metadata section with all parameters
                         if (parameters.Count > 0)
                         {
+                            int paramIndex = 0;
                             var metadataElement = new XElement("Metadata");
                             foreach (var param in parameters.OrderBy(p => p.Key))
                             {
-                                var paramElement = new XElement("Parameter",
-                                    new XAttribute("name", param.Key),
+                                var paramNameElement = new XElement("Parameter",
+                                    new XAttribute("name", $"paramName_{paramIndex}"),
+                                    param.Key
+                                );
+                                metadataElement.Add(paramNameElement);
+                                var paramValueElement = new XElement("Parameter",
+                                    new XAttribute("name", $"paramValue_{paramIndex}"),
                                     param.Value
                                 );
-                                metadataElement.Add(paramElement);
+                                metadataElement.Add(paramValueElement);
+                                paramIndex++;
                             }
                             familyElement.Add(metadataElement);
                         }
@@ -531,29 +538,29 @@ namespace boqtakeoff.core.Libraries
 
                         // Get file size (if family file is accessible)
                         long fileSize = 0;
-                        try
-                        {
-                            if (familyInfo.Family.IsEditable && !familyInfo.Family.IsInPlace)
-                            {
-                                // Try to get family document path
-                                Document familyDoc = _doc.EditFamily(familyInfo.Family);
-                                if (familyDoc != null)
-                                {
-                                    string familyPath = familyDoc.PathName;
-                                    if (!string.IsNullOrEmpty(familyPath) && File.Exists(familyPath))
-                                    {
-                                        FileInfo fileInfo = new FileInfo(familyPath);
-                                        fileSize = fileInfo.Length;
-                                    }
-                                    familyDoc.Close(false);
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            // If we can't get file size, use default
-                            fileSize = 552960; // Default size similar to example XML
-                        }
+                        //try
+                        //{
+                        //    if (familyInfo.Family.IsEditable && !familyInfo.Family.IsInPlace)
+                        //    {
+                        //        // Try to get family document path
+                        //        Document familyDoc = _doc.EditFamily(familyInfo.Family);
+                        //        if (familyDoc != null)
+                        //        {
+                        //            string familyPath = familyDoc.PathName;
+                        //            if (!string.IsNullOrEmpty(familyPath) && File.Exists(familyPath))
+                        //            {
+                        //                FileInfo fileInfo = new FileInfo(familyPath);
+                        //                fileSize = fileInfo.Length;
+                        //            }
+                        //            familyDoc.Close(false);
+                        //        }
+                        //    }
+                        //}
+                        //catch
+                        //{
+                        //    // If we can't get file size, use default
+                        //    fileSize = 552960; // Default size similar to example XML
+                        //}
 
                         // Build file path
                         string filePath = $"{categoryGroup.Key}/{familyInfo.FamilyName}.rfa";
@@ -602,8 +609,8 @@ namespace boqtakeoff.core.Libraries
                 };
 
                 // Add parameter columns (sorted for consistency)
-                var sortedParamNames = allParameterNames.OrderBy(p => p).ToList();
-                foreach (var paramName in sortedParamNames)
+                //var sortedParamNames = allParameterNames.OrderBy(p => p).ToList();
+                foreach (var paramName in allParameterNames)
                 {
                     headerColumns.Add($"{paramName}");
                 }
