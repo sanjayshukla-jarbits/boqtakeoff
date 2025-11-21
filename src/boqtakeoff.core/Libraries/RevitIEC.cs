@@ -57,6 +57,12 @@
             return typeof(BOQExtractor).Namespace + "." + nameof(BOQExtractor);
         }
 
+        // Add this new method
+        public static string GetAssemblyPath()
+        {
+            return typeof(BOQExtractor).Assembly.Location;
+        }
+
         public static string updateProjectInformation(string project_name, string project_key)
         {
             ProjectInfo projectInfo = doc.ProjectInformation;
@@ -216,6 +222,15 @@
         {
             // Return constructed namespace path.
             return typeof(CreateRoomCommand).Namespace + "." + nameof(CreateRoomCommand);
+        }
+
+        /// <summary>
+        /// Gets the assembly path where this command is located.
+        /// </summary>
+        /// <returns>The assembly location path.</returns>
+        public static string GetAssemblyPath()
+        {
+            return typeof(CreateRoomCommand).Assembly.Location;
         }
 
         #endregion

@@ -48,6 +48,7 @@ namespace boqtakeoff
                 Panel = boqRoomPanel,
                 Tooltip = "Create Room(s) automaticaly by Bigfish",
                 CommandNamespacePath = CreateRoomCommand.GetPath(),
+                AssemblyPath = CreateRoomCommand.GetAssemblyPath(),
                 IconImageName = "icon_TagWallLayers_32x32.png",
                 TooltipImageName = "icon_TagWallLayers_32x32.png"
             };
@@ -81,6 +82,7 @@ namespace boqtakeoff
                 Panel = SMIBoqPanel,
                 Tooltip = "Parses the CSV formatted BOQ and sends it to Bigfish ...",
                 CommandNamespacePath = BOQExtractor.GetPath(),
+                AssemblyPath = BOQExtractor.GetAssemblyPath(),
                 IconImageName = "icon_ShowFamilyManager_32x32.png",
                 TooltipImageName = "icon_ShowFamilyManager_32x32.png"
             };
@@ -120,6 +122,7 @@ namespace boqtakeoff
                 Panel = SMIBoqPanel,
                 Tooltip = "View and manage drawing schedules from BigFish",
                 CommandNamespacePath = ShowDrawingScheduleCommand.GetPath(),
+                AssemblyPath = ShowDrawingScheduleCommand.GetAssemblyPath(),
                 IconImageName = "icon_ShowFamilyManager_32x32.png",
                 TooltipImageName = "icon_ShowFamilyManager_32x32.png"
             };

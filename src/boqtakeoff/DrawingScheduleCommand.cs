@@ -141,5 +141,14 @@ namespace boqtakeoff
         {
             return typeof(ShowDrawingScheduleCommand).Namespace + "." + nameof(ShowDrawingScheduleCommand);
         }
+
+        /// <summary>
+        /// Gets the assembly path where this command is located.
+        /// </summary>
+        /// <returns>The assembly location path.</returns>
+        public static string GetAssemblyPath()
+        {
+            return typeof(ShowDrawingScheduleCommand).Assembly.Location;
+        }
     }
 }

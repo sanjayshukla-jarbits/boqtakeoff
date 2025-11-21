@@ -57,6 +57,15 @@
         /// </value>
         public string TooltipImageName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the assembly path where the command is located.
+        /// If not set, will use executing assembly.
+        /// </summary>
+        /// <value>
+        /// The assembly path.
+        /// </value>
+        public string AssemblyPath { get; set; }
+
         #endregion
 
         #region constructor
