@@ -150,7 +150,7 @@
     <value>Please select Project</value>
   </data>
   <data name="_client_id" xml:space="preserve">
-    <value>1000.XEUW44N220PKJBW2NBZ6X65B9K6WWR</value>
+    <value>1000.12YDFBF89Y0MM49S75W6N77NR9RSYJ</value>
   </data>
   <data name="DownloadTemplateTitle" xml:space="preserve">
     <value>Download Template</value>
@@ -195,7 +195,7 @@
     <value>BOQ Extractor</value>
   </data>
   <data name="_client_secret" xml:space="preserve">
-    <value>c226868a95ae747cc7cd3966b8c69e2e6d6998fcf6</value>
+    <value>c532479828eba64e19878581a0b5490ac1d82eaa85</value>
   </data>
   <data name="_get_project_uid_url" xml:space="preserve">
     <value>https://creator.zoho.in/api/v2/bigfish.central/packages/report/All_Project_Details</value>
@@ -213,7 +213,7 @@
     <value>Please select files</value>
   </data>
   <data name="_refresh_token" xml:space="preserve">
-    <value>1000.1ee3195f4d06fe07e54c18dd331fed75.60e5a61e7831d25ca6847e469d7e6500</value>
+    <value>1000.9216996d7505660489ac4ba04be2c55b.2697ac559886aae34f4e23cbb3cedad0</value>
   </data>
   <data name="P2-Stage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\breadcrumbs\Phas2\P2-Stage1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
