@@ -112,7 +112,7 @@ namespace boqtakeoff.core.Libraries
                         $"✓ CSV file saved to:\n{csvFilePath}\n\n" +
                         $"You can now verify the outputs.");
 
-                    return Result.Succeeded;
+                    // return Result.Succeeded;
                 }
                 catch (AggregateException aggEx)
                 {
@@ -138,6 +138,7 @@ namespace boqtakeoff.core.Libraries
                 TaskDialog.Show("Error", message);
                 return Result.Failed;
             }
+            return Result.Succeeded;
         }
 
         /// <summary>
@@ -374,6 +375,12 @@ namespace boqtakeoff.core.Libraries
                 // SECTION 2: Families grouped by Category
                 var familiesByCategoryElement = new XElement("FamiliesByCategory");
 
+                string tempFolder = Path.Combine(Path.GetTempPath(), "BIMLibrary", "TempFamily");
+                // Create temp directory if it doesn't exist
+                if (!Directory.Exists(tempFolder))
+                {
+                    Directory.CreateDirectory(tempFolder);
+                }
                 foreach (var categoryGroup in familiesByCategory)
                 {
                     var categoryGroupElement = new XElement("CategoryGroup",
@@ -393,29 +400,31 @@ namespace boqtakeoff.core.Libraries
 
                         // Get file size (if family file is accessible)
                         long fileSize = 0;
-                        //try
-                        //{
-                        //    if (familyInfo.Family.IsEditable && !familyInfo.Family.IsInPlace)
-                        //    {
-                        //        // Try to get family document path
-                        //        Document familyDoc = _doc.EditFamily(familyInfo.Family);
-                        //        if (familyDoc != null)
-                        //        {
-                        //            string familyPath = familyDoc.PathName;
-                        //            if (!string.IsNullOrEmpty(familyPath) && File.Exists(familyPath))
-                        //            {
-                        //                FileInfo fileInfo = new FileInfo(familyPath);
-                        //                fileSize = fileInfo.Length;
-                        //            }
-                        //            familyDoc.Close(false);
-                        //        }
-                        //    }
-                        //}
-                        //catch
-                        //{
-                        //    // If we can't get file size, use default
-                        //    fileSize = 123456; // Default size similar to example XML
-                        //}
+                        try
+                        {
+                            // Create a temporary file path for this family
+                            string exportPath = Path.Combine(tempFolder, familyInfo.FamilyName + ".rfa");
+                            if (familyInfo.Family.IsEditable && !familyInfo.Family.IsInPlace)
+                            {
+                                // Try to get family document path
+                                Document familyDoc = _doc.EditFamily(familyInfo.Family);
+                                if (familyDoc != null)
+                                {
+                                    familyDoc.SaveAs(exportPath);
+                                    familyDoc.Close(false);
+                                    // Get file size
+                                    FileInfo fileInfo = new FileInfo(exportPath);
+                                    fileSize = fileInfo.Length;
+                                    // Optionally delete the temp file after use
+                                    File.Delete(exportPath);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // If we can't get file size, use default
+                            fileSize = 123456; // Default size similar to example XML
+                        }
 
                         // Build file path
                         string filePath = $"{categoryGroup.Key}/{familyInfo.FamilyName}.rfa";
@@ -435,21 +444,14 @@ namespace boqtakeoff.core.Libraries
                         // Add Metadata section with all parameters
                         if (parameters.Count > 0)
                         {
-                            int paramIndex = 0;
                             var metadataElement = new XElement("Metadata");
                             foreach (var param in parameters.OrderBy(p => p.Key))
                             {
-                                var paramNameElement = new XElement("Parameter",
-                                    new XAttribute("name", $"paramName_{paramIndex}"),
-                                    param.Key
-                                );
-                                metadataElement.Add(paramNameElement);
-                                var paramValueElement = new XElement("Parameter",
-                                    new XAttribute("name", $"paramValue_{paramIndex}"),
+                                var paramElement = new XElement("Parameter",
+                                    new XAttribute("name", param.Key),
                                     param.Value
                                 );
-                                metadataElement.Add(paramValueElement);
-                                paramIndex++;
+                                metadataElement.Add(paramElement);
                             }
                             familyElement.Add(metadataElement);
                         }

@@ -666,7 +666,7 @@ namespace boqtakeoff.core
                         }
                         //MessageBox.Show("colorScheme.Name: " + colorScheme.Name);
                         View currentView = externalCommandData.Application.ActiveUIDocument.ActiveView;
-                        currentView.SetColorFillSchemeId(roomCategory.Id, colorScheme.Id);
+                        ApplyColorSchemeToView(currentView, roomCategory.Id, colorScheme.Id);
                         t.Commit();
 
                         // MessageBox.Show("Completed Modification...");
@@ -675,7 +675,7 @@ namespace boqtakeoff.core
                     {
                         //MessageBox.Show("DuplicateColorScheme else part");
                         View currentView = externalCommandData.Application.ActiveUIDocument.ActiveView;
-                        currentView.SetColorFillSchemeId(roomCategory.Id, CustomColorSchemeAvailable.Id);
+                        ApplyColorSchemeToView(currentView, roomCategory.Id, CustomColorSchemeAvailable.Id);
                         t.Commit();
 
                         //MessageBox.Show("Completed Modification...");
@@ -688,6 +688,25 @@ namespace boqtakeoff.core
                 Utility.Logger(exp);
                 throw;
             }
+        }
+
+        private static void ApplyColorSchemeToView(View currentView, ElementId categoryId, ElementId schemeId)
+        {
+            if (currentView == null)
+            {
+                Utility.Logger(new InvalidOperationException("Active view is not available to apply color scheme."));
+                return;
+            }
+
+            if (!currentView.CanApplyColorFillScheme(categoryId, schemeId))
+            {
+                string message = $"View '{currentView.Name}' does not support applying scheme '{schemeId.IntegerValue}' for category '{categoryId.IntegerValue}'.";
+                Utility.Logger(new InvalidOperationException(message));
+                TaskDialog.Show("Color Scheme", "Unable to apply color scheme for the current view. Please open a floor plan view and try again.");
+                return;
+            }
+
+            currentView.SetColorFillSchemeId(categoryId, schemeId);
         }
 
 

@@ -268,20 +268,45 @@ namespace boqtakeoff.core
     public class BigFishRestAPIs
     {
 
-        static readonly string _refresh_token = Properties.Resources._refresh_token;
-        static readonly string _client_id = Properties.Resources._client_id;
-        static readonly string _client_secret = Properties.Resources._client_secret;
 
-        static readonly string _token_url = Properties.Resources._token_url;
-        static readonly string _create_boq_url = Properties.Resources._create_boq_url;
-        static readonly string _get_boq_version_details_url = Properties.Resources._get_boq_version_details_url;
-        static readonly string _get_project_uid_url = Properties.Resources._get_project_uid_url;
-        static readonly string _get_bf_error_log_url = Properties.Resources._get_bf_error_log_url;
+    static readonly string _refresh_token;
+    static readonly string _client_id;
+    static readonly string _client_secret;
+    static readonly string _token_url;
+    static readonly string _create_boq_url;
+    static readonly string _get_boq_version_details_url;
+    static readonly string _get_project_uid_url;
+    static readonly string _get_bf_error_log_url;
+    static readonly string _get_drawing_records_in_schedule_url;
+    static readonly string _get_drawing_record_details_url;
+    static Hashtable errorMappings;
 
-        static readonly string _get_drawing_records_in_schedule_url = Properties.Resources._get_drawing_records_in_schedule_url;
-        static readonly string _get_drawing_record_details_url = Properties.Resources._get_drawing_record_details_url;
+    static BigFishRestAPIs()
+    {
+        try
+        {
+            _refresh_token = Properties.Resources._refresh_token;
+            _client_id = Properties.Resources._client_id;
+            _client_secret = Properties.Resources._client_secret;
+            _token_url = Properties.Resources._token_url;
+            _create_boq_url = Properties.Resources._create_boq_url;
+            _get_boq_version_details_url = Properties.Resources._get_boq_version_details_url;
+            _get_project_uid_url = Properties.Resources._get_project_uid_url;
+            _get_bf_error_log_url = Properties.Resources._get_bf_error_log_url;
 
-        static Hashtable errorMappings = new Hashtable();
+            _get_drawing_records_in_schedule_url = Properties.Resources._get_drawing_records_in_schedule_url;
+            _get_drawing_record_details_url = Properties.Resources._get_drawing_record_details_url;
+            errorMappings = new Hashtable();
+        }
+        catch (Exception ex)
+        {
+            Utility.Logger(ex);
+            // Set fallback values
+            _create_boq_url = "https://creator.zoho.in/api/v2/bigfish.central/purchases/form/CreateBOQ_RevitPlugin";
+            _get_boq_version_details_url = Properties.Resources._get_boq_version_details_url ?? "fallback_url";
+            // ... etc
+        }
+    }
         /// <summary>
         /// HTTP access constant to toggle 
         /// between local and global server.

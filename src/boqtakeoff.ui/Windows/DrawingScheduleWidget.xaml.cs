@@ -93,7 +93,7 @@ namespace boqtakeoff.ui.Windows
                     string auth_token = "Zoho-oauthtoken " + access_token;
 
                     var client = new RestClient(get_url);
-                    var request = new RestRequest(get_url, Method.Get);
+                    var request = new RestRequest(get_url, Method.GET);
                     request.AddHeader("Authorization", auth_token);
                     var response = client.Execute(request);
 
@@ -154,7 +154,7 @@ namespace boqtakeoff.ui.Windows
                 string auth_token = "Zoho-oauthtoken " + access_token;
 
                 var client = new RestClient(get_url);
-                var request = new RestRequest(get_url, Method.Get);
+                var request = new RestRequest(get_url, Method.GET);
                 request.AddHeader("Authorization", auth_token);
                 var response = client.Execute(request);
 

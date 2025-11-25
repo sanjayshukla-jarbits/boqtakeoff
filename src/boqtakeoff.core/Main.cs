@@ -427,6 +427,57 @@ namespace boqtakeoff.core
                 string access_token = BigFishRestAPIs.get_access_token();
                 List<getProjectDetails> project_uid_list = BigFishRestAPIs.getProjectNameList(access_token);
                 // Add the list to the combo box
+                 // Switch back to the UI thread before touching controls
+                if (InvokeRequired) {
+                    Invoke(new Action(() => populateInGUIProjectDetails(project_uid_list)));
+                } else {
+                    populateInGUIProjectDetails(project_uid_list);
+                }
+
+                // List<string> project_name_list = new List<string>();
+                // cmbProjects.Items.Clear();
+                // cmbProjects.Enabled = true;
+                // cmbProjects.Items.Insert(0, "--Please select---");
+                // foreach (getProjectDetails curr_project_data in project_uid_list)
+                // {
+                //     cmbProjects.Items.Add(curr_project_data.project_name);
+                //     project_name_list.Add(curr_project_data.project_name);
+
+                //     if (!project_uid_hash_project_details.ContainsKey(curr_project_data.project_name))
+                //     {
+                //         Hashtable projectDetails = new Hashtable();
+                //         projectDetails.Add("project_id", curr_project_data.project_id);
+                //         projectDetails.Add("project_key", curr_project_data.project_key);
+                //         project_uid_hash_project_details.Add(curr_project_data.project_name, projectDetails);
+                //     }
+                // }
+                // //SM-1225: Qualcomm Incorporated I Noida I D&B I 2024
+                // revit_project_name = BOQExtractor.getProjectInformationFromRevitModel();
+                // cmbProjects.SelectedIndex = 0;
+                // if (revit_project_name != "")
+                // {
+                //     if (project_name_list.Contains(revit_project_name))
+                //     {
+                //         selected_project_id = revit_project_name;
+                //         cmbProjects.SelectedItem = revit_project_name;
+                //     }
+                // }
+            }
+            catch (Exception exp)
+            {
+                Utility.Logger(exp);
+            }
+        }
+
+        private void populateInGUIProjectDetails(List<getProjectDetails> project_uid_list)
+        {
+            try
+            {
+                if (project_uid_list == null || project_uid_list.Count == 0)
+                {
+                    return;
+                }
+                // Add the list to the combo box
 
                 List<string> project_name_list = new List<string>();
                 cmbProjects.Items.Clear();
