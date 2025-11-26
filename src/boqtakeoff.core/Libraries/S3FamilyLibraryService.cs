@@ -362,6 +362,72 @@ namespace boqtakeoff.core.Libraries
         }
 
         /// <summary>
+        /// Upload family file (.rfa) to S3 bucket
+        /// </summary>
+        /// <param name="localFilePath">Local path to RFA file to upload</param>
+        /// <param name="s3Key">S3 object key (e.g., "CategoryName/FamilyName.rfa")</param>
+        public async Task UploadFamilyFileAsync(string localFilePath, string s3Key)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(localFilePath) || !File.Exists(localFilePath))
+                {
+                    throw new FileNotFoundException($"Family file not found: {localFilePath}");
+                }
+
+                if (string.IsNullOrWhiteSpace(s3Key))
+                {
+                    throw new ArgumentException("S3 key cannot be null or empty", nameof(s3Key));
+                }
+
+                var request = new PutObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = s3Key,
+                    FilePath = localFilePath,
+                    ContentType = "application/octet-stream"
+                };
+
+                await _s3Client.PutObjectAsync(request);
+            }
+            catch (Exception ex)
+            {
+                Utility.Logger(ex);
+                throw new Exception($"Error uploading family file to S3: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Upload XML file to S3 bucket
+        /// </summary>
+        /// <param name="xmlFilePath">Local path to XML file to upload</param>
+        public async Task UploadXmlFileAsync(string xmlFilePath)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(xmlFilePath) || !File.Exists(xmlFilePath))
+                {
+                    throw new FileNotFoundException($"XML file not found: {xmlFilePath}");
+                }
+
+                var request = new PutObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = _indexFileName,
+                    FilePath = xmlFilePath,
+                    ContentType = "application/xml"
+                };
+
+                await _s3Client.PutObjectAsync(request);
+            }
+            catch (Exception ex)
+            {
+                Utility.Logger(ex);
+                throw new Exception($"Error uploading XML file to S3: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
         /// Dispose S3 client
         /// </summary>
         public void Dispose()

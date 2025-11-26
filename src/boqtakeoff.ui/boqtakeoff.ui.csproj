@@ -180,13 +180,21 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Commands\BimLibraryCommand.cs" />
+    <Compile Include="Commands\FamilyUploadCommand.cs" />
     <Compile Include="Views\FamilyBrowserWindow.xaml.cs">
       <DependentUpon>FamilyBrowserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FamilyUploadWindow.xaml.cs">
+      <DependentUpon>FamilyUploadWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoadFamilyEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\FamilyBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FamilyUploadWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

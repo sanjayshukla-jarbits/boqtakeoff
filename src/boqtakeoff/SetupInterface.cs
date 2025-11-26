@@ -111,6 +111,12 @@ namespace boqtakeoff
             // Add separator
             bimLibraryPanel.AddSeparator();
 
+            // Add Family Upload Button
+            AddFamilyUploadButton(bimLibraryPanel);
+
+            // Add separator
+            bimLibraryPanel.AddSeparator();
+
             // Add Export Families to S3 Button
             AddExportFamiliesToS3Button(bimLibraryPanel);
 
@@ -148,6 +154,31 @@ namespace boqtakeoff
                 };
 
                 var bimLibraryButton = RevitPushButton.Create(bimLibraryData);
+            }
+            catch (Exception ex)
+            {
+                boqtakeoff.core.Libraries.Utility.Logger(ex);
+            }
+        }
+
+        /// <summary>
+        /// Add Family Upload button to ribbon panel
+        /// </summary>
+        private void AddFamilyUploadButton(RibbonPanel panel)
+        {
+            try
+            {
+                var familyUploadData = new RevitPushButtonDataModel
+                {
+                    Label = "Upload\nFamily",
+                    Panel = panel,
+                    Tooltip = "Upload Revit family file to cloud BIM Library",
+                    CommandNamespacePath = FamilyUploadCommand.GetPath(),
+                    IconImageName = "icon_TagWallLayers_32x32.png",  // Replace with your icon
+                    TooltipImageName = "icon_TagWallLayers_32x32.png"
+                };
+
+                var familyUploadButton = RevitPushButton.Create(familyUploadData);
             }
             catch (Exception ex)
             {
