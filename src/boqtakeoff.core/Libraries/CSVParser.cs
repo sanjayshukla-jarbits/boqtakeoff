@@ -168,15 +168,16 @@ namespace boqtakeoff.core
                     // Iterate through the cells in the first row to get column names.
                     for (int i = 1; i <= columnCount; i++)
                     {
-                        Microsoft.Office.Interop.Excel.Range cell = sheet.UsedRange.Cells[1, i];
-                        if (cell.Value != null && !string.IsNullOrWhiteSpace(cell.Value.ToString()))
+                        var cell = sheet.UsedRange.Cells[1, i] as Microsoft.Office.Interop.Excel.Range;
+                        var cellValue = Convert.ToString(cell?.Value2)?.Trim();
+                        if (!string.IsNullOrWhiteSpace(cellValue))
                         {
-                            if (cell.Value.ToLower().ToString() == "item sku" || cell.Value.ToLower().ToString() == "quantity" ||
-                                cell.Value.ToLower().ToString() == "uom")
+                            var lowerValue = cellValue.ToLowerInvariant();
+                            if (lowerValue == "item sku" || lowerValue == "quantity" || lowerValue == "uom")
                             {
                                 hasAllImportentColumn++;
                             }
-                            columnNames.Add(cell.Value.ToString().ToLower());
+                            columnNames.Add(lowerValue);
                         }
                         else
                         {

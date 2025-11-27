@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Xml.Linq;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -1725,6 +1726,7 @@ const T f = ( ay * bx ) - ( ax * by );
 
         private const string _caption = "The Building Coder";
 
+        [SupportedOSPlatform("windows7.0")]
         public static void InfoMsg(string msg)
         {
             Debug.WriteLine(msg);
@@ -1756,6 +1758,7 @@ const T f = ( ay * bx ) - ( ax * by );
             d.Show();
         }
 
+        [SupportedOSPlatform("windows7.0")]
         public static void ErrorMsg(string msg)
         {
             Debug.WriteLine(msg);

@@ -93,7 +93,7 @@ namespace boqtakeoff.ui.Windows
                     string auth_token = "Zoho-oauthtoken " + access_token;
 
                     var client = new RestClient(get_url);
-                    var request = new RestRequest(get_url, Method.GET);
+                    var request = new RestRequest(get_url, Method.Get);
                     request.AddHeader("Authorization", auth_token);
                     var response = client.Execute(request);
 
@@ -154,7 +154,7 @@ namespace boqtakeoff.ui.Windows
                 string auth_token = "Zoho-oauthtoken " + access_token;
 
                 var client = new RestClient(get_url);
-                var request = new RestRequest(get_url, Method.GET);
+                var request = new RestRequest(get_url, Method.Get);
                 request.AddHeader("Authorization", auth_token);
                 var response = client.Execute(request);
 
@@ -240,7 +240,9 @@ namespace boqtakeoff.ui.Windows
         private void ExportToExcel(string filePath)
         {
             // Fix for LicenseContext ambiguity - use fully qualified name
+#pragma warning disable CS0618
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+#pragma warning restore CS0618
 
             using (var package = new ExcelPackage())
             {

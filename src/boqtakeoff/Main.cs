@@ -20,13 +20,29 @@ namespace boqtakeoff
         /// <exception cref="System.NotImplementedException"></exception>
         public Result OnStartup(UIControlledApplication application)
         {
-            // Initialize whole plugin's user interface.
-            var ui = new SetupInterface();
-            ui.Initialize(application);
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("BOQ Plugin initializing...");
+                
+                // Initialize whole plugin's user interface.
+                var ui = new SetupInterface();
+                ui.Initialize(application);
 
-            // application.ControlledApplication.ApplicationInitialized += DockablePaneRegisters;
+                // application.ControlledApplication.ApplicationInitialized += DockablePaneRegisters;
 
-            return Result.Succeeded;
+                System.Diagnostics.Debug.WriteLine("BOQ Plugin initialized successfully");
+                return Result.Succeeded;
+            }
+            catch (System.Exception ex)
+            {
+                System.IO.File.AppendAllText(
+                    System.IO.Path.Combine(
+                        System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop),
+                        "boq_plugin_error.log"),
+                    $"{System.DateTime.Now}: {ex}\r\n");
+                System.Diagnostics.Debug.WriteLine($"BOQ Plugin initialization failed: {ex}");
+                return Result.Failed;
+            }
         }
 
         /// <summary>

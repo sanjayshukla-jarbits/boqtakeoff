@@ -36,9 +36,9 @@
             string versionNumber = application.VersionNumber;
             // string buildNumber = application.VersionBuild;
 
-            if (versionNumber != "2022" && versionNumber != "2023")
+            if (versionNumber != "2022" && versionNumber != "2023" && versionNumber != "2025")
             {
-                TaskDialog.Show("Error ...", "The plugin is compliant with the Revit 2022 and higher versions...");
+                TaskDialog.Show("Error ...", "The plugin is compliant with the Revit 2022, 2023, and 2025 versions...");
                 return Result.Failed;
             }
 
@@ -176,9 +176,9 @@
             string versionNumber = application.VersionNumber;
             // string buildNumber = application.VersionBuild;
 
-            if (versionNumber != "2022" && versionNumber != "2023")
+            if (versionNumber != "2022" && versionNumber != "2023" && versionNumber != "2025")
             {
-                TaskDialog.Show("Error ...", "The plugin is compliant with the Revit 2022 and higher versions...");
+                TaskDialog.Show("Error ...", "The plugin is compliant with the Revit 2022, 2023, and 2025 versions...");
                 return Result.Failed;
             }
 

@@ -3,10 +3,10 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
-using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml;
+using WinForms = System.Windows.Forms;
+using RevitTaskDialog = Autodesk.Revit.UI.TaskDialog;
 
 namespace boqtakeoff.core.Libraries
 {
@@ -173,18 +173,18 @@ namespace boqtakeoff.core.Libraries
             {
                 if (MessageType.ToString().ToLower() == "information")
                 {
-                    System.Windows.Forms.MessageBox.Show(Message, Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    WinForms.MessageBox.Show(Message, Title, WinForms.MessageBoxButtons.OK, WinForms.MessageBoxIcon.Information);
 
                 }
                 else if (MessageType.ToString().ToLower() == "error")
                 {
-                    System.Windows.Forms.MessageBox.Show(Message, Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    WinForms.MessageBox.Show(Message, Title, WinForms.MessageBoxButtons.OK, WinForms.MessageBoxIcon.Error);
                 }
 
             }
             else if (MessageWindowType.ToString().ToLower() == "task")
             {
-                TaskDialog d = new TaskDialog("TaskDialog");
+                RevitTaskDialog d = new RevitTaskDialog("TaskDialog");
                 d.MainContent = Message;
                 d.Title = Title;
                 //d.FooterText = "<b>Bigfish Tool </b>";
@@ -192,9 +192,9 @@ namespace boqtakeoff.core.Libraries
             }
         }
 
-        public static TaskDialog ShowTaskDialogMessageWithProgressBar(string Message, string Title = "title")
+        public static RevitTaskDialog ShowTaskDialogMessageWithProgressBar(string Message, string Title = "title")
         {
-            TaskDialog d = new TaskDialog("TaskDialog");
+            RevitTaskDialog d = new RevitTaskDialog("TaskDialog");
             d.MainContent = Message;
             d.Title = Title;
             d.FooterText = "Bigfish";
